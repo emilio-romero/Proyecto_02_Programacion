@@ -6,16 +6,23 @@ class EvolucionDif{
 private:
   int individuos;
   int generaciones;
+  std::vector<std::vector<double> > poblacion;
+  std::vector<std::vector<double> > pmutada;
+  std::vector<std::vector<double> > pcruzada;
+  std::vector<double> mejor_individuo;
 public:
   EvolucionDif(int ts, int tt);
   ~EvolucionDif();
   
-  void IniciaPoblacion();
-  void Mutacion();
-  void Cruza();
+  void IniciaPoblacion(std::vector<double> bL, std::vector<double> bU);
+  void Mutacion(double F,std::vector<double> bL, std::vector<double> bU);
+  void Cruza(double Cr);
   void Seleccion();
   void Elmejor();
+  double fob(std::vector<double>);
 
+  std::vector<int> randperm();
 };
+
 
 #endif 

@@ -14,18 +14,81 @@ EvolucionDif::~EvolucionDif(){
 //Getters
 
 //Algoritmo 
-void EvolucionDif::IniciaPoblacion(){
-
+void EvolucionDif::IniciaPoblacion(std::vector<double> bL, std::vector<double> bU){
+  int n=bL.size();
+  std::vector<double> aux;
+  for(int i=0;i<individuos;i++){
+    for(int j=0;j<n;j++){
+      aux.push_back(randx()*(bU[j]-bL[j])+bL[j]);
+    }
+    poblacion.push_back(aux);
+    aux.clear();
+  }
 }
-void EvolucionDif::Mutacion(){
-
+void EvolucionDif::Mutacion(double F,std::vector<double> bL, std::vector<double> bU){
+ std::vector<int> rs; 
+ pmutada=poblacion; 
+ int n=bL.size();
+ for(int i=0;i<individuos;i++){
+  rs=randperm();
+  for(int j=0;j<n;j++){
+    pmutada[i][j]=poblacion[rs[0]][j]+F*(poblacion[rs[1]][j]-poblacion[rs[2]][j]);
+    if(pmutada[i][j]>bU[j] || pmutada[i][j]<bL[j]){
+      pmutada[i][j]=randx()*(bU[j]-bL[j])+bL[j];
+    }
+  } 
+ } 
 }
-void EvolucionDif::Cruza(){
-
+void EvolucionDif::Cruza(double Cr){
+  pcruzada=poblacion; 
+  int n=poblacion[0].size();
+  int rn; 
+  for(int i=0;i<individuos;i++){
+    for(int j=0;j<n;j++){
+      rn=rand()%n;
+      if(randx()<=Cr || rn==j){
+        pcruzada[i][j]=pmutada[i][j];
+      }
+    }
+  }
 }
 void EvolucionDif::Seleccion(){
-
+  double xi,ui; 
+  for(int i=0;i<individuos;i++){
+    xi=fob(poblacion[i]);
+    ui=fob(pcruzada[i]);
+    #warning Seleccion: Revisar la comparacion de acuerdo a la fob
+    if(ui>xi){
+      poblacion[i]=pcruzada[i];
+    }
+  }
 }
 void EvolucionDif::Elmejor(){
+  int b=0;
+  double best=fob(poblacion[0]); 
+  for(int i=1;i<individuos;i++){
+    #warning Elmejor: Revisar la comparacion de acuerdo a la fob
+    if(fob(poblacion[i])>best){
+      b=i; 
+      best=fob(poblacion[i]);
+    }
+  }
+  mejor_individuo=poblacion[b];
+}
 
+double EvolucionDif::fob(std::vector<double> X){
+  return(1.0);
+}
+
+/*Miscelanea*/
+std::vector<int> EvolucionDif::randperm(){
+  std::vector<int> aux; 
+  aux.push_back(rand()%individuos);
+  aux.push_back(aux[0]);
+  aux.push_back(aux[0]);
+  do{
+    aux[1]=rand()%individuos;
+    aux[2]=rand()%individuos;
+  }while(aux[0]==aux[1] || aux[1]==aux[2] || aux[2]==aux[0]);
+return(aux);
 }
