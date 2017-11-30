@@ -21,8 +21,9 @@ private:
   int Entradas_capa; 
   std::vector<double> valores_salida;
   std::vector<std::vector<double> > pesos;
+  int tipo;
 public:
-  Capa(int nneur,int nin);
+  Capa(int nneur,int nin, int tipoactivacion);
   Capa();
   ~Capa();
   
@@ -56,6 +57,7 @@ public:
   std::vector<double> get_parametros();
 
   void cambiar_parametros(std::vector<double>);
+  std::vector<double> segmentar(std::vector<double>);
 };
 
 

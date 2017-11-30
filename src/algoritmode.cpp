@@ -10,7 +10,16 @@ EvolucionDif::~EvolucionDif(){
 
 }
 //Setters 
+void EvolucionDif::set_datos(std::vector<double> entr, std::vector<double> dgt){
+  dentrada=entr; 
+  dground=dgt;
+}
 
+void EvolucionDif::set_red(std::vector<int> topo, int entr, int sali){
+  arqred=topo; 
+  inred=entr; 
+  outred=sali;
+}
 //Getters
 
 //Algoritmo 
@@ -77,11 +86,28 @@ void EvolucionDif::Elmejor(){
 }
 
 double EvolucionDif::fob(std::vector<double> X){
-  return(1.0);
+  Rna prueba=Rna(arqred,inred,outred);
+  prueba.cambiar_parametros(X); 
+  int n=dentrada.size();
+  std::vector<double> auxiliar;
+  std::vector<double> me, mc;
+  double tptn=0;
+  for(int i=0;i<n;i++){
+    auxiliar.push_back(dentrada[i]);
+    prueba.Prealimentacion(auxiliar);
+    me=prueba.get_salida();
+    mc.push_back(dground[i]); 
+    if(me[0]==mc[0]){
+      tptn=tptn+1.0;
+    }
+    mc.clear();
+    auxiliar.clear();
+  }
+  return(tptn/(double)n);
 }
 
-std::vector<double> EvolucionDif::Algoritmo(std::vector<double> bL, std::vector<double> bU,double F
-,double Cr){
+std::vector<double> EvolucionDif::Algoritmo(std::vector<double> bL,
+std::vector<double> bU,double F,double Cr){
   IniciaPoblacion(bL,bU);
   for(int k=0;k<generaciones;k++){
     Mutacion(F,bL,bU);
@@ -89,6 +115,7 @@ std::vector<double> EvolucionDif::Algoritmo(std::vector<double> bL, std::vector<
     Seleccion();
     Elmejor();
   }
+  return(mejor_individuo);
 }
 
 

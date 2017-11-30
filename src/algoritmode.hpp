@@ -10,10 +10,17 @@ private:
   std::vector<std::vector<double> > pmutada;
   std::vector<std::vector<double> > pcruzada;
   std::vector<double> mejor_individuo;
+  std::vector<double> dentrada; 
+  std::vector<double> dground;
+  std::vector<int> arqred; 
+  int inred; 
+  int outred;
 public:
   EvolucionDif(int ts, int tt);
   ~EvolucionDif();
-  
+
+  void set_datos(std::vector<double>, std::vector<double>);
+  void set_red(std::vector<int>, int, int); 
   void IniciaPoblacion(std::vector<double> bL, std::vector<double> bU);
   void Mutacion(double F,std::vector<double> bL, std::vector<double> bU);
   void Cruza(double Cr);

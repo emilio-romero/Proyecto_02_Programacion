@@ -2,9 +2,10 @@
 
 /*Clase capa*/
 /*Constructores de capa*/
-Capa::Capa(int nneur, int nin){
+Capa::Capa(int nneur, int nin,int tipoactivacion){
   Neuronas=nneur;
   Entradas_capa=nin+1; 
+  tipo=tipoactivacion;
   //Conexiones hacia atras? 
   for(int i=0;i<nneur;i++){
     std::vector<double> mvec;
@@ -26,8 +27,22 @@ Capa::~Capa(){
 void Capa::funcion_activacion(std::vector<double> valores_medios){
   int n=valores_medios.size();
   if(n==valores_salida.size()) valores_salida.clear();
-  for(int i=0;i<n;i++){
-    valores_salida.push_back(valores_medios[i]);
+  if(tipo==0){
+  double fun;
+    for(int i=0;i<n;i++){
+      fun=tanh(valores_medios[i]);
+      valores_salida.push_back(fun);
+    }
+  }
+  if(tipo==1){
+    for(int i=0;i<n;i++){
+      if(valores_medios[i]>0.0){
+        valores_salida.push_back(1.0);
+      }
+      else{
+        valores_salida.push_back(-1.0);
+      }
+    }
   }
 }
 void Capa::calcula_salidas(std::vector<double> valores_entrada){
@@ -35,7 +50,7 @@ void Capa::calcula_salidas(std::vector<double> valores_entrada){
 
   std::vector<double> medios; 
   std::vector<double> primeros=valores_entrada;
-  primeros.push_back(1.0);
+  primeros.push_back(-1.0);
   for(int i=0;i<Neuronas;i++){
     suma=0;
     for(int j=0;j<Entradas_capa;j++){
@@ -106,15 +121,15 @@ std::vector<double> Capa::get_pesosinvec(){
 Rna::Rna(std::vector<int> arquitectura,int entradas, int salidas){
   int n=arquitectura.size();
   if(n>1){
-    Lared.push_back(Capa(arquitectura[0],entradas));
+    Lared.push_back(Capa(arquitectura[0],entradas,0));
     for(int i=1;i<n;i++){
-      Lared.push_back(Capa(arquitectura[i],arquitectura[i-1]));
+      Lared.push_back(Capa(arquitectura[i],arquitectura[i-1],0));
     }
-    Lared.push_back(Capa(salidas,arquitectura[n-1]));
+    Lared.push_back(Capa(salidas,arquitectura[n-1],1));
   }
   else if(n==1){
-    Lared.push_back(Capa(arquitectura[0],entradas));
-    Lared.push_back(Capa(salidas,arquitectura[0]));
+    Lared.push_back(Capa(arquitectura[0],entradas,0));
+    Lared.push_back(Capa(salidas,arquitectura[0],1));
   }
   else{
     std::cout<<"Introduzca un numero de capas valido"<<std::endl;
@@ -167,7 +182,7 @@ void Rna::cambiar_parametros(std::vector<double> nuevos_parametros){
   for(int i=0;i<n;i++){
     neu=Lared[i].get_neuronas();
     ent=Lared[i].get_entradas();
-    std::cout<<"Elementos "<<neu*ent<<std::endl;
+//    std::cout<<"Elementos "<<neu*ent<<std::endl;
     for(int j=ni;j<ni+neu*ent;j++){
      // std::cout<<j<<std::endl;
       auxiliar.push_back(nuevos_parametros[j]);
@@ -177,6 +192,25 @@ void Rna::cambiar_parametros(std::vector<double> nuevos_parametros){
     auxiliar.clear();
     ni=ni+neu*ent;
   }
+}
+
+std::vector<double> Rna::segmentar(std::vector<double> datosentrada){
+  int n=datosentrada.size();
+  std::vector<double> auxin; 
+  std::vector<double> auxiliar; 
+  for(int i=0;i<n;i++){
+    auxin.push_back(datosentrada[i]);
+    Prealimentacion(auxin);
+    if(Salida[0]<=0){
+      auxiliar.push_back(0);
+    }
+    else{
+      auxiliar.push_back(255); 
+    }
+    auxin.clear();
+    if(i<100) std::cout<<auxiliar[i]<<std::endl;
+  }
+return(auxiliar);
 }
 
 /*Funciones Auxiliares*/
