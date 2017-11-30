@@ -145,6 +145,40 @@ std::vector<double> Rna::get_salida(){
   return(Salida);
 }
 
+std::vector<double> Rna::get_parametros(){
+  std::vector<double> auxiliar;
+  std::vector<double> toma;
+  int n=Lared.size();
+  auxiliar=Lared[0].get_pesosinvec();
+  for(int i=1;i<n;i++){
+    toma=Lared[i].get_pesosinvec();
+    auxiliar.reserve(auxiliar.size()+toma.size());
+    auxiliar.insert(auxiliar.end(),toma.begin(),toma.end());
+    toma.clear();
+  }
+return(auxiliar);
+}
+
+void Rna::cambiar_parametros(std::vector<double> nuevos_parametros){
+  int n=Lared.size();
+  //std::cout<<"Cuantas matrices: "<<n<<"\n";
+  int neu,ent,ni=0;
+  std::vector<double> auxiliar;
+  for(int i=0;i<n;i++){
+    neu=Lared[i].get_neuronas();
+    ent=Lared[i].get_entradas();
+    std::cout<<"Elementos "<<neu*ent<<std::endl;
+    for(int j=ni;j<ni+neu*ent;j++){
+     // std::cout<<j<<std::endl;
+      auxiliar.push_back(nuevos_parametros[j]);
+    }
+    //std::cout<<std::endl;
+    Lared[i].cambiar_pesos(auxiliar);
+    auxiliar.clear();
+    ni=ni+neu*ent;
+  }
+}
+
 /*Funciones Auxiliares*/
 double randx(){
 return(std::rand()/(double)RAND_MAX);

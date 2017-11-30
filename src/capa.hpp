@@ -47,12 +47,15 @@ private:
   std::vector<Capa> Lared;
   std::vector<double> Salida;
 public: 
-  Rna(std::vector<int>,int, int);
+  Rna(std::vector<int> arquitectura,int entradas, int salidas);
   Rna();
   ~Rna();
   void Prealimentacion(std::vector<double> Entrada);
   
   std::vector<double> get_salida();
+  std::vector<double> get_parametros();
+
+  void cambiar_parametros(std::vector<double>);
 };
 
 
