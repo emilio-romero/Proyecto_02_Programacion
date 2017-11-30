@@ -20,7 +20,7 @@ public:
   void Seleccion();
   void Elmejor();
   double fob(std::vector<double>);
-
+  std::vector<double> Algoritmo(std::vector<double>,std::vector<double>,double,double);
   std::vector<int> randperm();
 };
 

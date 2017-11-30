@@ -80,6 +80,18 @@ double EvolucionDif::fob(std::vector<double> X){
   return(1.0);
 }
 
+std::vector<double> EvolucionDif::Algoritmo(std::vector<double> bL, std::vector<double> bU,double F
+,double Cr){
+  IniciaPoblacion(bL,bU);
+  for(int k=0;k<generaciones;k++){
+    Mutacion(F,bL,bU);
+    Cruza(Cr);
+    Seleccion();
+    Elmejor();
+  }
+}
+
+
 /*Miscelanea*/
 std::vector<int> EvolucionDif::randperm(){
   std::vector<int> aux; 
@@ -92,3 +104,7 @@ std::vector<int> EvolucionDif::randperm(){
   }while(aux[0]==aux[1] || aux[1]==aux[2] || aux[2]==aux[0]);
 return(aux);
 }
+
+
+
+
