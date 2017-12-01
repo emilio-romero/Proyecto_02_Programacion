@@ -1,10 +1,11 @@
 #include "capa.hpp"
 #include "algoritmode.hpp"
 #include "lectura.hpp"
+#include <ctime>
 //#include <ctime>
 using namespace std;
 int main(){
-srand(42);
+srand(time(NULL));
 vector<int> topologia={4,4};
 int elementos=33; 
 vector<double> datos=readPgm("1.pgm");
@@ -16,7 +17,7 @@ for(int i=0;i<33;i++){
   bu.push_back(1.0);
 }
 
-EvolucionDif entrenamiento=EvolucionDif(10,10); //tamanio poblacion, generaciones
+EvolucionDif entrenamiento=EvolucionDif(5,5); //tamanio poblacion, generaciones
 entrenamiento.set_datos(datos,comparacion);
 entrenamiento.set_red(topologia,1,1);
 cout<<"Entra a entrenar"<<endl;

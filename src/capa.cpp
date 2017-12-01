@@ -50,7 +50,7 @@ void Capa::calcula_salidas(std::vector<double> valores_entrada){
 
   std::vector<double> medios; 
   std::vector<double> primeros=valores_entrada;
-  primeros.push_back(-1.0);
+  primeros.push_back(1.0);
   for(int i=0;i<Neuronas;i++){
     suma=0;
     for(int j=0;j<Entradas_capa;j++){
